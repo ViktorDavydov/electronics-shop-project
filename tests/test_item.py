@@ -8,6 +8,10 @@ def test_Item():
     assert item1.name == "Плазма"
     assert item1.price == 200000
     assert item1.quantity == 2
+    item1.name = "Утюг"
+    assert item1.name == "Утюг"
+    item1.name = "Утюг крутой супер"
+    assert item1.name == "Утюг круто"
 
 
 def test_calculate_total_price():
@@ -22,3 +26,8 @@ def test_apply_discount():
     """Тестирование метода применения скидки возвращающий None"""
     item1 = Item("Наушники", 15000, 80)
     assert item1.apply_discount() is None
+
+
+def test_Item_string_to_number():
+    assert Item.string_to_number("6") == 6
+    assert Item.string_to_number("10.4") == 10
