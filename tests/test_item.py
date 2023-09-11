@@ -31,3 +31,9 @@ def test_apply_discount():
 def test_Item_string_to_number():
     assert Item.string_to_number("6") == 6
     assert Item.string_to_number("10.4") == 10
+
+
+def test_repr():
+    item = Item("Весы", 3000, 8)
+    assert repr(item) == "Item('Весы', 3000, 8)"
+    assert str(item) == 'Весы'

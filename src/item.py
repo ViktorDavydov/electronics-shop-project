@@ -21,6 +21,14 @@ class Item:
         self.quantity = quantity
         # Item.all.append(self)
 
+    def __repr__(self):
+        """Magic method __repr__ initializing"""
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+
+    def __str__(self):
+        """Magic method __str__ initializing"""
+        return f"{self.__name}"
+
     @classmethod
     def instantiate_from_csv(cls, file_name):
         """Class method creating for opening csv file and adding instances to new
