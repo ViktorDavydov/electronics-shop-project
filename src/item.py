@@ -29,6 +29,12 @@ class Item:
         """Magic method __str__ initializing"""
         return f"{self.__name}"
 
+    def __add__(self, other):
+        if issubclass(other.__class__, self.__class__):
+            total_sum = self.quantity + other.quantity
+            return total_sum
+        return f"Нельзя складывать объекты разных классов"
+
     @classmethod
     def instantiate_from_csv(cls, file_name):
         """Class method creating for opening csv file and adding instances to new

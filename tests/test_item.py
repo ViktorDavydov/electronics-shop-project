@@ -1,5 +1,6 @@
 import pytest
 from src.item import Item
+from src.phone import Phone
 
 
 def test_Item():
@@ -29,11 +30,23 @@ def test_apply_discount():
 
 
 def test_Item_string_to_number():
+    """Тестирование статик-метода"""
     assert Item.string_to_number("6") == 6
     assert Item.string_to_number("10.4") == 10
 
 
 def test_repr():
+    """Тестирование repr"""
     item = Item("Весы", 3000, 8)
     assert repr(item) == "Item('Весы', 3000, 8)"
     assert str(item) == 'Весы'
+
+
+def test_add():
+    """Тестирование add"""
+    item = Item("Планшет", 10000, 50)
+    phone = Phone("Смартфон", 30000, 30, 1)
+    assert item + phone == 80
+    assert phone + phone == 60
+    assert item + 50 == "Нельзя складывать объекты разных классов"
+    assert phone + 100 == "Нельзя складывать объекты разных классов"
