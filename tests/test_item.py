@@ -1,5 +1,5 @@
 import pytest
-from src.item import Item
+from src.item import Item, InstantiateCSVError, CSVError
 from src.phone import Phone
 
 
@@ -50,3 +50,15 @@ def test_add():
     assert phone + phone == 60
     assert item + 50 == "Нельзя складывать объекты разных классов"
     assert phone + 100 == "Нельзя складывать объекты разных классов"
+
+
+def test_empty_csv():
+    """Тестирование пустого файла"""
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv("item.csv")
+
+
+def test_broken_csv():
+    """Тестирование поврежденного файла"""
+    with pytest.raises(CSVError):
+        Item.instantiate_from_csv("../src/item.csv")

@@ -1,6 +1,28 @@
 import csv
 
 
+class CSVError(Exception):
+    """Родительский класс от Exception"""
+
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else "Файл item.csv поврежден"
+
+    def __str__(self):
+        return self.message
+
+
+class InstantiateCSVError:
+    """Собственный класс на проверку повреждения файла csv"""
+    def __init__(self, file_name):
+        with open(file_name) as csvfile:
+            reader_exc = csv.reader(csvfile)
+            headers = list(reader_exc)[0]
+            if headers != ['name', 'price', 'quantity']:
+                raise CSVError
+            else:
+                self.file_name = file_name
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -39,12 +61,28 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls, file_name):
         """Class method creating for opening csv file and adding instances to new
-        empty all list"""
+        empty all list. Making an exceptions if csv is empty or broken"""
         cls.all = []
-        with open(file_name) as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                cls.all.append(cls(row["name"], row["price"], row["quantity"]))
+        try:
+            open(file_name)
+
+        except FileNotFoundError:
+            # raise FileNotFoundError
+            print("FileNotFoundError: Отсутствует файл item.csv")
+
+        else:
+            try:
+                script = InstantiateCSVError(file_name)
+
+            except CSVError:
+                # raise CSVError
+                print("InstantiateCSVError: Файл item.csv поврежден")
+
+            else:
+                with open(file_name) as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        cls.all.append(cls(row["name"], row["price"], row["quantity"]))
 
     @staticmethod
     def string_to_number(string_num):
