@@ -1,5 +1,5 @@
 import pytest
-from src.item import Item, InstantiateCSVError, CSVError
+from src.item import Item, InstantiateCSVError
 from src.phone import Phone
 
 
@@ -60,5 +60,5 @@ def test_empty_csv():
 
 def test_broken_csv():
     """Тестирование поврежденного файла"""
-    with pytest.raises(CSVError):
+    with pytest.raises(InstantiateCSVError):
         Item.instantiate_from_csv("../src/item.csv")

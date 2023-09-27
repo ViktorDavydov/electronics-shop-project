@@ -1,7 +1,7 @@
 import csv
 
 
-class CSVError(Exception):
+class InstantiateCSVError(Exception):
     """Родительский класс от Exception"""
 
     def __init__(self, *args, **kwargs):
@@ -9,18 +9,6 @@ class CSVError(Exception):
 
     def __str__(self):
         return self.message
-
-
-class InstantiateCSVError:
-    """Собственный класс на проверку повреждения файла csv"""
-    def __init__(self, file_name):
-        with open(file_name) as csvfile:
-            reader_exc = csv.reader(csvfile)
-            headers = list(reader_exc)[0]
-            if headers != ['name', 'price', 'quantity']:
-                raise CSVError
-            else:
-                self.file_name = file_name
 
 
 class Item:
@@ -64,25 +52,16 @@ class Item:
         empty all list. Making an exceptions if csv is empty or broken"""
         cls.all = []
         try:
-            open(file_name)
+            with open(file_name) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    cls.all.append(cls(row["name"], row["price"], row["quantity"]))
 
         except FileNotFoundError:
-            # raise FileNotFoundError
-            print("FileNotFoundError: Отсутствует файл item.csv")
+            raise FileNotFoundError("Отсутствует файл item.csv")
 
-        else:
-            try:
-                script = InstantiateCSVError(file_name)
-
-            except CSVError:
-                # raise CSVError
-                print("InstantiateCSVError: Файл item.csv поврежден")
-
-            else:
-                with open(file_name) as csvfile:
-                    reader = csv.DictReader(csvfile)
-                    for row in reader:
-                        cls.all.append(cls(row["name"], row["price"], row["quantity"]))
+        except KeyError:
+            raise InstantiateCSVError("Файл item.csv поврежден")
 
     @staticmethod
     def string_to_number(string_num):
